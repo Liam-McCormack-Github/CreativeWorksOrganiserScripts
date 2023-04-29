@@ -13,7 +13,7 @@ download_storage_dir = fr'{root_dir}\Storage'
 temp_dir = fr'{data_dir}\Temp'
 log_dir = fr'{data_dir}\Log'
 storage_dir = fr'{data_dir}\Storage'
-input_dir = fr'{data_dir}\Input'
+input_dir = fr'{temp_dir}\Input'
 
 # Files
 log_file = fr'{log_dir}\log.txt'
