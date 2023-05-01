@@ -3,7 +3,7 @@ import sqlite3
 
 from sqlite3 import Error
 from re import sub
-from os.path import isfile
+from os.path import isfile, join
 
 from dbConnect import dbConnect
 from logger import logger
@@ -103,7 +103,7 @@ def downloadWorkFromID_ao3(workID, title, downloadFormat):
     title = title if title != '' else work.title
     cleanTitle = sub(r'[^\w\.\-]', ' ', title)
     fileName = f'AO3_{workID}_{cleanTitle}'
-    filePath = f'{download_storage_dir}\{fileName}.{downloadFormat}'
+    filePath = join(download_storage_dir, f'{fileName}.{downloadFormat}')
     with open(filePath, 'wb') as file:
         file.write(work.download(downloadFormat))
         file.close()

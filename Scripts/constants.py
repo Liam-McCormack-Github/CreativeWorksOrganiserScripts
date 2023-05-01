@@ -1,4 +1,4 @@
-from os.path import abspath, dirname
+from os.path import abspath, dirname, join
 
 # Text Constants
 https = r'https://www.'
@@ -6,19 +6,19 @@ no_ID = r'__ID_NOT_FOUND__'
 
 # Directories
 root_dir = dirname(dirname(abspath(__file__)))
-py_dir = fr'{root_dir}\Scripts'
-data_dir = fr'{root_dir}\Data'
-download_storage_dir = fr'{root_dir}\Storage'
+py_dir = join(root_dir, 'Scripts')
+data_dir = join(root_dir, 'Data')
+download_storage_dir = join(root_dir, 'Storage')
 
-temp_dir = fr'{data_dir}\Temp'
-log_dir = fr'{data_dir}\Log'
-storage_dir = fr'{data_dir}\Storage'
-input_dir = fr'{temp_dir}\Input'
+temp_dir = join(data_dir, 'Temp')
+log_dir = join(data_dir, 'Log')
+storage_dir = join(data_dir, 'Storage')
+input_dir = join(temp_dir, 'Input')
 
 # Files
-log_file = fr'{log_dir}\log.txt'
-temp_file = fr'{temp_dir}\temp.txt'
-db_file = fr'{storage_dir}\index.db'
+log_file = join(log_dir, 'log.txt')
+temp_file = join(temp_dir, 'temp.txt')
+db_file = join(storage_dir, 'index.db')
 
 # Scripts Names
 startup_py = r'startup.py'

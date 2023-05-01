@@ -6,7 +6,7 @@ from pytesseract import image_to_string, TesseractNotFoundError
 from PIL import Image, ImageDraw
 from io import BytesIO
 from bs4 import BeautifulSoup
-from os.path import isfile
+from os.path import isfile, join
 from re import sub
 
 from constants import download_storage_dir
@@ -107,7 +107,7 @@ def downloadWorkFromID_tth(workID, title, downloadFormat):
 
     cleanTitle = sub(r'[^\w\.\-]', ' ', title)
     fileName = f'TTH_{workID}_{cleanTitle}'
-    filePath = f'{download_storage_dir}\{fileName}.{downloadFormat}'
+    filePath = join(download_storage_dir, f'{fileName}.{downloadFormat}')
 
     try:
         content = requests.get(url_download).content
