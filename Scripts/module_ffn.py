@@ -102,7 +102,10 @@ def queryMetadataDB(workID, outputDB):
         except OSError as e:
             logger(module_ffn_py, f"Error deleting the file: {e}")
 
-        return rows[0]
+        if len(rows[0]) > 0:
+            return rows[0]
+        else:
+            return None
 
 
 def fetchMetadataFromID_ffn(workID):
@@ -113,8 +116,8 @@ def fetchMetadataFromID_ffn(workID):
 
     fetchData = queryMetadataDB(workID, outputDB)
 
-    for i, value in enumerate(fetchData):
-        print(i, value)
+    if fetchData is None:
+        return {'unavailable': '1'}
 
     work_title = fetchData[3]
     work_summary = fetchData[9]
@@ -174,7 +177,7 @@ def module_ffn():
 
 if __name__ == '__main__':
     module_ffn()
-    test = fetchMetadataFromID_ffn(14212106)
+    test = fetchMetadataFromID_ffn(5410629)
     print(test)
     # www.fanfiction.net/s/13798037
     # fichub_cli -u "https://www.fanfiction.net/s/13798037" --format html -o "C:\Users\liam\OneDrive\Documents\GitHub\CreativeWorksOrganiserScripts\Scripts\new"
