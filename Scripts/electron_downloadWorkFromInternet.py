@@ -1,6 +1,7 @@
 from sys import argv, stdout
 from module_ao3 import host_ao3
 from module_tth import host_tth
+from module_ffn import host_ffn
 from classWorkMetadata import WorkMetadata
 from logger import logger
 from constants import electron_downloadWorkFromInternet_py
@@ -16,6 +17,8 @@ def electron_downloadWorkFromInternet():
         if work.host == host_ao3:
             work.downloadWorkViaModules(downloadFormat)
         if work.host == host_tth:
+            work.downloadWorkViaModules(downloadFormat)
+        if work.host == host_ffn:
             work.downloadWorkViaModules(downloadFormat)
         logger(electron_downloadWorkFromInternet_py, f'{count}/{len(argv)} : {objectID}')
     stdout.flush()

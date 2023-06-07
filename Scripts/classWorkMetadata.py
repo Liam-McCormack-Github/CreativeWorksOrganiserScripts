@@ -4,7 +4,7 @@ from dbConnect import dbConnect
 from constants import WorkMetadata_py, https
 from module_ao3 import host_ao3, url_indicates_ao3, fetchMetadataFromID_ao3, downloadWorkFromID_ao3
 from module_tth import host_tth, url_indicates_tth, fetchMetadataFromID_tth, downloadWorkFromID_tth
-from module_ffn import host_ffn, url_indicates_ffn
+from module_ffn import host_ffn, url_indicates_ffn, fetchMetadataFromID_ffn, downloadWorkFromID_ffn
 from logger import logger
 
 
@@ -229,7 +229,7 @@ class WorkMetadata:
         elif self.host == host_tth:
             workDownloaded = downloadWorkFromID_tth(self.work_id, self.title, downloadFormat)
         elif self.host == host_ffn:
-            workDownloaded = False
+            workDownloaded = downloadWorkFromID_ffn(self.work_id, self.title, downloadFormat)
         else:
             return None
 
@@ -252,8 +252,7 @@ class WorkMetadata:
         elif self.host == host_tth:
             workData = fetchMetadataFromID_tth(self.work_id)
         elif self.host == host_ffn:
-            # fetchMetadataFromID_ao3()
-            workData = {}
+            workData = fetchMetadataFromID_ffn(self.work_id)
         else:
             return None
 
@@ -341,10 +340,11 @@ class WorkMetadata:
 
 
 def main():
-    new_work = WorkMetadata({'object_id': 'AO3_43715991'})
-    print(new_work.saved)
-    print(new_work.downloadWorkViaModules())
-    print(new_work.saved)
+    new_work = WorkMetadata({'object_id': 'FFN_5410629'})
+    print(new_work.title)
+    # print(new_work.saved)
+    # print(new_work.downloadWorkViaModules())
+    # print(new_work.saved)
     # new_work.updateWorkInDB({'tags': 'AO3_43715991'})
     # print(new_work.tags)
     # print(new_work.updateClassFromDB())
