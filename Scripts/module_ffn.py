@@ -102,9 +102,10 @@ def queryMetadataDB(workID, outputDB):
         except OSError as e:
             logger(module_ffn_py, f"Error deleting the file: {e}")
 
-        if len(rows[0]) > 0:
+        if len(rows) > 0:
             return rows[0]
         else:
+            logger(module_ffn_py, f"Error Row Empty : {rows}")
             return None
 
 
