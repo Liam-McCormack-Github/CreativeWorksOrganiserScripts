@@ -118,16 +118,17 @@ def fetchMetadataFromID_ffn(workID):
 
     work_title = fetchData[3]
     work_summary = fetchData[9]
-    work_summary = work_summary.replace('<p>', '', 1).replace('</p>', '', 1)
+    if work_summary is not None:
+        work_summary = work_summary.replace('<p>', '', 1).replace('</p>', '', 1)
     work_series = None
     work_authors = fetchData[4]
     work_fandoms = fetchData[19]
-    work_fandoms = work_fandoms.replace(' Crossover', '', 1).replace(' + ', '\n', 1)
-    print(work_fandoms)
+    if work_fandoms is not None:
+        work_fandoms = work_fandoms.replace(' Crossover', '', 1).replace(' + ', '\n', 1)
     work_tags = fetchData[12]
     work_characters = fetchData[13]
-    work_characters = work_characters.replace('., ', '.\n', 1)
-    print(work_characters)
+    if work_characters is not None:
+        work_characters = work_characters.replace('., ', '.\n', 1)
     work_categories = fetchData[12]
     work_relationships = None
     work_warnings = 'Warnings Not Found'
