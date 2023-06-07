@@ -46,7 +46,7 @@ def useShellToCreateMetadataDB(workID):
         "-i",
         f"https://www.fanfiction.net/s/{workID}",
         "-o",
-        r"C:\Users\liam\AppData\Roaming\CreativeWorksOrganiser\Application Storage\Data\Storage"
+        storage_dir
     ]
     startup_info = subprocess.STARTUPINFO()
     startup_info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -93,7 +93,7 @@ def queryMetadataDB(workID, outputDB):
         "fic_last_updated", 
         "db_last_updated", 
         "source"
-        FROM fichub_metadata WHERE fic_id = {workID}'''
+        FROM fichub_metadata WHERE source = LIKE '%{workID}%'"'''
         c.execute(query_sql)
         rows = c.fetchall()
         conn.close()
@@ -101,6 +101,8 @@ def queryMetadataDB(workID, outputDB):
             remove(outputDB)
         except OSError as e:
             logger(module_ffn_py, f"Error deleting the file: {e}")
+
+        print(rows)
 
         if len(rows) > 0:
             return rows[0]
@@ -178,8 +180,13 @@ def module_ffn():
 
 if __name__ == '__main__':
     module_ffn()
-    test = fetchMetadataFromID_ffn(5410629)
-    print(test)
+    print(fetchMetadataFromID_ffn(13317559))
+    print(fetchMetadataFromID_ffn(9562369))
+    # print(fetchMetadataFromID_ffn(5169168))
+    # print(fetchMetadataFromID_ffn(11838016))
+    # print(fetchMetadataFromID_ffn(12728536))
+    # print(fetchMetadataFromID_ffn(10961102))
+    # print(fetchMetadataFromID_ffn(13154265))
     # www.fanfiction.net/s/13798037
     # fichub_cli -u "https://www.fanfiction.net/s/13798037" --format html -o "C:\Users\liam\OneDrive\Documents\GitHub\CreativeWorksOrganiserScripts\Scripts\new"
     # fichub_cli metadata -i https://archiveofourown.org/works/10916730/chapters/24276864
