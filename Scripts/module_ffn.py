@@ -1,7 +1,7 @@
 import subprocess
 import sqlite3
 
-from constants import download_storage_dir, temp_dir, storage_dir
+from constants import download_storage_dir, temp_dir, storage_dir, https
 from logger import logger
 from os.path import exists
 from os import remove
@@ -44,7 +44,7 @@ def useShellToCreateMetadataDB(workID):
         "fichub_cli",
         "metadata",
         "-i",
-        f"https://www.fanfiction.net/s/{workID}",
+        f"{https}{url_indicates_ffn}{workID}",
         "-o",
         storage_dir
     ]
@@ -66,7 +66,7 @@ def useShellToCreateMetadataDB(workID):
         return None
 
 
-def queryMetadataDB(workID, outputDB):
+def queryMetadataDB(outputDB):
     if exists(outputDB):
         conn = sqlite3.connect(outputDB)
         c = conn.cursor()
@@ -93,7 +93,7 @@ def queryMetadataDB(workID, outputDB):
         "fic_last_updated", 
         "db_last_updated", 
         "source"
-        FROM fichub_metadata WHERE source = LIKE '%{workID}%'"'''
+        FROM fichub_metadata'''
         c.execute(query_sql)
         rows = c.fetchall()
         conn.close()
