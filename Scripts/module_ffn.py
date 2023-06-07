@@ -44,7 +44,7 @@ def useShellToCreateMetadataDB(workID):
         "fichub_cli",
         "metadata",
         "-i",
-        f"{https}{url_indicates_ffn}{workID}",
+        f"{https}{url_indicates_ffn[0]}{workID}",
         "-o",
         storage_dir
     ]
@@ -117,7 +117,7 @@ def fetchMetadataFromID_ffn(workID):
     if not outputDB:
         return {'unavailable': '1'}
 
-    fetchData = queryMetadataDB(workID, outputDB)
+    fetchData = queryMetadataDB(outputDB)
 
     if fetchData is None:
         return {'unavailable': '1'}
