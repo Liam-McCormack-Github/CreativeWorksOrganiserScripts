@@ -2,24 +2,24 @@ import subprocess
 import sqlite3
 import zipfile
 
-from constants import download_storage_dir, temp_dir, storage_dir, https
+from constants import download_storage_dir, storage_dir, https
 from logger import logger
-from os.path import exists
+from os.path import exists, isfile
 from os import remove
-from re import compile, sub
+from re import compile
 
 # Module Constants
 host_ffn = r'FFN'
 url_indicates_ffn = r'fanfiction.net/s/',
 module_ffn_py = r'module_ffn.py'
+valid_download_formats_ffn = ('HTML', 'EPUB', 'MOBI', 'PDFF')
 
 
-def unzip_and_delete(file_path):
+def unzip_and_delete(file_path, extract_path):
     with zipfile.ZipFile(file_path, 'r') as zip_ref:
-        zip_ref.extractall(storage_dir)
+        zip_ref.extractall(extract_path)
 
     remove(file_path)
-
 
 
 def remove_color_codes(text):
@@ -36,7 +36,7 @@ def useShellToDownloadWork(workID, downloadFormat):
         "--format",
         downloadFormat,
         "-o",
-        storage_dir
+        download_storage_dir
     ]
     startup_info = subprocess.STARTUPINFO()
     startup_info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -56,9 +56,30 @@ def useShellToDownloadWork(workID, downloadFormat):
 
 
 def downloadWorkFromID_ffn(workID, title, downloadFormat):
-    download = useShellToDownloadWork(workID, downloadFormat)
-    print(download)
-    unzip_and_delete(download)
+    if downloadFormat not in valid_download_formats_ffn:
+        logger(module_ffn_py, f'Error   : Selected Format for download of FFN_{workID} is {downloadFormat} which is not supported. Changing format to {valid_download_formats_ffn[0]}')
+        downloadFormat = valid_download_formats_ffn[0]
+
+    if downloadFormat == 'HTML':
+        downloadFormat = 'html'
+    elif downloadFormat == 'PDF':
+        downloadFormat = 'pdf'
+    elif downloadFormat == 'EPUB':
+        downloadFormat = 'epub'
+    elif downloadFormat == 'MOBI':
+        downloadFormat = 'mobi'
+
+    filePath = useShellToDownloadWork(workID, downloadFormat)
+
+    if not filePath:
+        return False
+
+    if downloadFormat == 'HTML':
+        unzip_and_delete(filePath, download_storage_dir)
+        filePath.replace('.zip', '.html')
+
+    if isfile(filePath):
+        return True
 
 
 def useShellToCreateMetadataDB(workID):
