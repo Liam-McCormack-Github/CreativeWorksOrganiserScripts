@@ -60,15 +60,6 @@ def downloadWorkFromID_ffn(workID, title, downloadFormat):
         logger(module_ffn_py, f'Error   : Selected Format for download of FFN_{workID} is {downloadFormat} which is not supported. Changing format to {valid_download_formats_ffn[0]}')
         downloadFormat = valid_download_formats_ffn[0]
 
-    if downloadFormat == 'HTML':
-        downloadFormat = 'html'
-    elif downloadFormat == 'PDF':
-        downloadFormat = 'pdf'
-    elif downloadFormat == 'EPUB':
-        downloadFormat = 'epub'
-    elif downloadFormat == 'MOBI':
-        downloadFormat = 'mobi'
-
     filePath = useShellToDownloadWork(workID, downloadFormat)
 
     if not filePath:
