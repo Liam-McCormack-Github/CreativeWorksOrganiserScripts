@@ -54,9 +54,9 @@ def findWorkThroughAPI(workID):
                 loop_stage = 2
                 logger(module_ao3_py, f'Warning : Invalid Id AO3_{workID} --Attempt to try with credentials')
             except AO3.utils.HTTPError:
-                tempPause()
                 loop_stage = 1
                 logger(module_ao3_py, f'Warning : HTTPError AO3_{workID} --Pausing to reset time out')
+                tempPause()
             except AttributeError:
                 loop_stage = 2
                 logger(module_ao3_py, f'Warning : AttributeError AO3_{workID} --Attempt to try with credentials')
@@ -79,9 +79,9 @@ def findWorkThroughAPI(workID):
                 loop_stage = 3
                 logger(module_ao3_py, f'Error   : Invalid Id AO3_{workID} --Tried with credentials')
             except AO3.utils.HTTPError:
-                tempPause()
                 loop_stage = 2
                 logger(module_ao3_py, f'Warning : HTTPError AO3_{workID} --Trying again after 5 Minutes, with credentials')
+                tempPause()
             except AttributeError:
                 loop_stage = 3
                 logger(module_ao3_py, f'Error   : AttributeError AO3_{workID}')
@@ -105,7 +105,15 @@ def downloadWorkFromID_ao3(workID, title, downloadFormat):
     fileName = f'AO3_{workID}_{cleanTitle}'
     filePath = join(download_storage_dir, f'{fileName}.{downloadFormat}')
     with open(filePath, 'wb') as file:
-        file.write(work.download(downloadFormat))
+        while True:
+            try:
+                workDownload = work.download(downloadFormat)
+                break
+            except AO3.utils.HTTPError:
+                logger(module_ao3_py, f'Warning : HTTPError AO3_{workID} --Trying again after 5 Minutes')
+                tempPause()
+
+        file.write(workDownload)
         file.close()
 
     if isfile(filePath):
