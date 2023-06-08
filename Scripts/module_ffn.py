@@ -1,5 +1,6 @@
 import subprocess
 import sqlite3
+import zipfile
 
 from constants import download_storage_dir, temp_dir, storage_dir, https
 from logger import logger
@@ -13,30 +14,51 @@ url_indicates_ffn = r'fanfiction.net/s/',
 module_ffn_py = r'module_ffn.py'
 
 
-def downloadWorkFromID_ffn(workID, title, downloadFormat):
-    command = [
-        "fichub_cli",
-        "-u",
-        f"https://www.fanfiction.net/s/{workID}",
-        "--format",
-        "html",
-        "-o",
-        download_storage_dir
-    ]
+def unzip_and_delete(file_path):
+    with zipfile.ZipFile(file_path, 'r') as zip_ref:
+        zip_ref.extractall(storage_dir)
 
-    print(command)
+    remove(file_path)
 
-    result = subprocess.call(command)
-
-    print(result)
-
-    input()
 
 
 def remove_color_codes(text):
     ansi_escape = compile(r'\x1B\[[0-?]*[ -/]*[@-~]')
     text_without_color = ansi_escape.sub('', text)
     return text_without_color
+
+
+def useShellToDownloadWork(workID, downloadFormat):
+    command = [
+        "fichub_cli",
+        "-u",
+        f"{https}{url_indicates_ffn[0]}{workID}",
+        "--format",
+        downloadFormat,
+        "-o",
+        storage_dir
+    ]
+    startup_info = subprocess.STARTUPINFO()
+    startup_info.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    startup_info.wShowWindow = subprocess.SW_HIDE
+
+    process = subprocess.Popen(command, startupinfo=startup_info, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    output, error = process.communicate(input="Y")
+
+    return_code = process.returncode
+    if return_code == 0:
+        pathToOutput = output.split('Downloaded ')[1].split('\n')[0]
+        pathToOutput = remove_color_codes(pathToOutput)
+        return pathToOutput[1:-1]
+    else:
+        logger(module_ffn_py, f'Error: {error}')
+        return None
+
+
+def downloadWorkFromID_ffn(workID, title, downloadFormat):
+    download = useShellToDownloadWork(workID, downloadFormat)
+    print(download)
+    unzip_and_delete(download)
 
 
 def useShellToCreateMetadataDB(workID):
@@ -180,8 +202,9 @@ def module_ffn():
 
 if __name__ == '__main__':
     module_ffn()
-    print(fetchMetadataFromID_ffn(13317559))
-    print(fetchMetadataFromID_ffn(9562369))
+    downloadWorkFromID_ffn(13317559, 'title', 'html')
+    # print(fetchMetadataFromID_ffn(13317559))
+    # print(fetchMetadataFromID_ffn(9562369))
     # print(fetchMetadataFromID_ffn(5169168))
     # print(fetchMetadataFromID_ffn(11838016))
     # print(fetchMetadataFromID_ffn(12728536))
