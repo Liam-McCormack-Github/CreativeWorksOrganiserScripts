@@ -12,7 +12,7 @@ from re import compile
 host_ffn = r'FFN'
 url_indicates_ffn = r'fanfiction.net/s/',
 module_ffn_py = r'module_ffn.py'
-valid_download_formats_ffn = ('HTML', 'EPUB', 'MOBI', 'PDFF')
+valid_download_formats_ffn = ('HTML', 'EPUB', 'MOBI', 'PDF')
 
 
 def unzip_and_delete(file_path, extract_path):
