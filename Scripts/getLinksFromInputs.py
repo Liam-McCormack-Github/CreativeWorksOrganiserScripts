@@ -14,7 +14,7 @@ def saveURLtoTemp(content=''):
 
 def getInputsFromBookmarks(file):
     file_path = join(input_dir, file)
-    with open(file_path, 'r') as f:
+    with open(file_path, 'r',  encoding='utf8') as f:
         soup = BeautifulSoup(f.read(), 'html.parser')
 
     dt = soup.find_all('dt')
